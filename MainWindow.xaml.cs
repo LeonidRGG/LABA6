@@ -95,7 +95,10 @@ namespace LABA6
                     case "Subtract":
                         _currentNumber = _storedNumber - _currentNumber;
                         break;
-                    
+                    case "Multiply":
+                        _currentNumber = _storedNumber * _currentNumber;
+                        break;
+                   
                 }
 
                 Display.Text = _currentNumber.ToString();
