@@ -98,7 +98,10 @@ namespace LABA6
                     case "Multiply":
                         _currentNumber = _storedNumber * _currentNumber;
                         break;
-                   
+                    case "Divide":
+                        if (_currentNumber == 0) throw new DivideByZeroException();
+                        _currentNumber = _storedNumber / _currentNumber;
+                        break;
                 }
 
                 Display.Text = _currentNumber.ToString();
