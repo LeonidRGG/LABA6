@@ -18,19 +18,41 @@ namespace LABA6
 
         private void Number_Click(object sender, RoutedEventArgs e)
         {
+            var button = (Button)sender;
+            var number = button.Content.ToString();
+
             if (_isNewNumber)
             {
-                Display.Text = "";
+                if (number == "0" && Display.Text == "0")
+                    return;
+
+                Display.Text = number == "0" ? "0" : number;
                 _isNewNumber = false;
             }
+            else
+            {
+                if (Display.Text == "0")
+                    Display.Text = number;
+                else
+                    Display.Text += number;
+            }
 
-            var button = (Button)sender;
-            Display.Text += button.Content.ToString();
-            _currentNumber = double.Parse(Display.Text);
+            if (!double.TryParse(Display.Text, out _currentNumber))
+            {
+                Display.Text = "Ошибка";
+                _currentNumber = 0;
+            }
         }
 
         private void Decimal_Click(object sender, RoutedEventArgs e)
         {
+            if (_isNewNumber)
+            {
+                Display.Text = "0.";
+                _isNewNumber = false;
+                return;
+            }
+
             if (!Display.Text.Contains("."))
             {
                 Display.Text += ".";
@@ -48,23 +70,47 @@ namespace LABA6
 
         private void Operation_Click(object sender, RoutedEventArgs e)
         {
+            if (!_isNewNumber)
+            {
+                Equals_Click(sender, e);
+                _isNewNumber = true;
+            }
+
             var button = (Button)sender;
             _currentOperation = button.Tag.ToString();
             _storedNumber = _currentNumber;
-            _isNewNumber = true;
         }
 
         private void Equals_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentOperation == "Add")
+            if (_currentOperation == null) return;
+
+            try
             {
-                _currentNumber = _storedNumber + _currentNumber;
+                switch (_currentOperation)
+                {
+                    case "Add":
+                        _currentNumber = _storedNumber + _currentNumber;
+                        break;
+                    case "Subtract":
+                        _currentNumber = _storedNumber - _currentNumber;
+                        break;
+                    
+                }
+
                 Display.Text = _currentNumber.ToString();
-                _isNewNumber = true;
             }
-            else
+            catch (DivideByZeroException)
             {
-                Display.Text = "Выберите операцию";
+                Display.Text = "Ошибка: деление на 0";
+            }
+            catch (Exception)
+            {
+                Display.Text = "Ошибка вычисления";
+            }
+            finally
+            {
+                _isNewNumber = true;
             }
         }
     }
