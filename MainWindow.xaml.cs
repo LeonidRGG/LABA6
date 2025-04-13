@@ -56,8 +56,16 @@ namespace LABA6
 
         private void Equals_Click(object sender, RoutedEventArgs e)
         {
-            // Базовая реализация - операции будут в отдельных ветках
-            Display.Text = "Реализация в ветках операций";
+            if (_currentOperation == "Add")
+            {
+                _currentNumber = _storedNumber + _currentNumber;
+                Display.Text = _currentNumber.ToString();
+                _isNewNumber = true;
+            }
+            else
+            {
+                Display.Text = "Выберите операцию";
+            }
         }
     }
 }
